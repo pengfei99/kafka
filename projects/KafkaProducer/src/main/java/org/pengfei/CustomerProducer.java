@@ -16,7 +16,7 @@ public class CustomerProducer {
     public static void main(String[] args) {
         int MESSAGE_COUNT = 1000;
         String topicName = "test-topic";
-        String BROKERS_URL= "";
+        String BROKERS_URL= "pengfei.org:9092";
 
         /** Step1 : set up the producer config*/
         Properties props = new Properties();
