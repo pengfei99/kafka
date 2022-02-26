@@ -1,4 +1,4 @@
-package main.java.org.pengfei.Lesson01_Producer.source;
+package org.pengfei;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -6,20 +6,23 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import main.java.org.pengfei.ConstantsForKafka;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class ProducerExp {
+public class CustomerProducer {
 
-    public static void exp1() {
-        /** Step1 : build the producer*/
+    public static void main(String[] args) {
+        int MESSAGE_COUNT = 1000;
+        String topicName = "test-topic";
+        String BROKERS_URL= "";
+
+        /** Step1 : set up the producer config*/
         Properties props = new Properties();
         // These three config is mandatory, we can't omit them
         // ProducerConfig.BOOTSTRAP_SERVERS_CONFIG == "bootstrap.servers"
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, ConstantsForKafka.BROKERS_URL);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERS_URL);
         // The keySerializer will be used to serialize the key encapsulated in ProducerRecord.
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
         // The ValueSerializer will be used to serialize the value encapsulated in ProducerRecord.
@@ -45,19 +48,21 @@ public class ProducerExp {
         //3 secs
         props.put("max.block.ms", 3000);
 
+
+        /** Step2: build the kafka producer instance*/
         KafkaProducer p1 = new KafkaProducer<>(props);
 
-        /** Step2: Send the message and get reply*/
+        /** Step3: Send the message and get reply*/
         // key is optional, can be omitted
-        Long key=10000000L;
-        for (int i = 0; i < ConstantsForKafka.MESSAGE_COUNT; i++) {
+        Long key = 10000000L;
+        for (int i = 0; i < MESSAGE_COUNT; i++) {
             ProducerRecord<Long, String> record =
-                    new ProducerRecord<>("test-topic", key + i, "test-value" + i);
+                    new ProducerRecord<>(topicName, key + i, "test-value" + i);
 
-          // get metadata after a synchronously send
+            // get metadata after a synchronously send
             try {
                 Future response = p1.send(record);
-                RecordMetadata metadata=(RecordMetadata)response.get();
+                RecordMetadata metadata = (RecordMetadata) response.get();
                 System.out.println("Record sent with key " + i + " to partition " + metadata.partition()
                         + " with offset " + metadata.offset());
             } catch (ExecutionException e) {
@@ -68,7 +73,10 @@ public class ProducerExp {
                 System.out.println(e);
             }
         }
-        // close the producer connexion.
+
+
+        /** Step4: close the producer connexion.*/
         p1.close();
     }
 }
+

@@ -1,4 +1,4 @@
-package org.pengfei.Lesson01_Producer.source;
+package main.java.org.pengfei.Lesson01_Producer.source;
 
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;

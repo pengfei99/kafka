@@ -1,4 +1,4 @@
-package org.pengfei;
+package main.java.org.pengfei;
 
 public interface ConstantsForKafka {
 

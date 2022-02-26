@@ -1,6 +1,6 @@
-package org.pengfei.Lesson01_Producer;
+package main.java.org.pengfei.Lesson01_Producer;
 
-import org.pengfei.Lesson01_Producer.source.ProducerExp;
+import main.java.org.pengfei.Lesson01_Producer.source.ProducerExp;
 
 public class L01_Producer {
     public static void main(String[] args){

@@ -1,4 +1,4 @@
-package org.pengfei.Lesson01_Producer.source;
+package main.java.org.pengfei.Lesson01_Producer.source;
 
 public class Customer {
     private int customerID;

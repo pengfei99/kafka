@@ -1,9 +1,9 @@
-package org.pengfei.Lesson01_Producer.source;
+package main.java.org.pengfei.Lesson01_Producer.source;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.Serializer;
-import org.pengfei.ConstantsForKafka;
+import main.java.org.pengfei.ConstantsForKafka;
 
 import java.util.Properties;
 
