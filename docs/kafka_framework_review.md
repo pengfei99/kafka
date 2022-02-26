@@ -1,0 +1,1 @@
+https://medium.com/@stephane.maarek/the-kafka-api-battle-producer-vs-consumer-vs-kafka-connect-vs-kafka-streams-vs-ksql-ef584274c1e#:~:text=Kafka%20Producer%20API%3A%20Applications%20directly,%2C%20Twitter%2C%20REST%20API).
