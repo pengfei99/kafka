@@ -7,5 +7,30 @@ Due to the decoupled nature of Kafka, producers and consumers do not communicate
 the type of data the producer is sending in order to deserialize it. Imagine if the producer starts sending bad data to Kafka or if the data type of your 
 data gets changed. Your downstream consumers will start breaking. We need a way to have a common data type that both producer and consumer must be agreed upon.
 
-That’s where **Schema Registry** comes into the picture. It is an application that resides outside of your Kafka cluster and handles the distribution of 
+Below figure shows kafka workflow without schema registry.
+![kafka_without_schema_registry](../images/kafka_without_schema_registry.png)
+
+
+# What is Schema registry?
+**Schema Registry** is an application that resides outside of your Kafka cluster and handles the distribution of 
 schemas to the producer and consumer by storing a copy of schema in its local cache.
+Below figure shows kafka workflow with schema registry.
+![kafka_with_schema_registry](../images/kafka_with_schema_registry.png)
+
+With the schema registry in place, the producer, before sending the data to Kafka, talks to the schema registry first and checks if the schema is available. 
+- If the producer doesn’t find the schema then it registers and caches it in the schema registry.
+- If the producer gets the schema, it will serialize the data with the schema and send it to Kafka in binary format prepended with a unique schema ID. 
+
+When the consumer processes this message, it will communicate with the schema registry using the schema ID it got from the producer and deserialize it using the same schema. If there is a schema mismatch, the schema registry will throw an error letting the producer know that it’s breaking the schema agreement.
+
+
+# Data Serialization Formats
+Now that we know how schema registry works, what kind of data serialization format are we using with the schema registry? There are a few important points that we should consider when choosing the right data serialization format:
+- If the serialization format is binary.
+- If we can use schemas to enforce strict data structures.
+
+Following are some data serialization formats as per the above considerations:
+|Name|Binary format| Schema(Interface description language)|
+|:---|:----:|:----:|
+| Json | No | No |
+| XML | No | Yes|
