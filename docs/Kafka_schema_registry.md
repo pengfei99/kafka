@@ -46,13 +46,14 @@ Following are some data serialization formats as per the above considerations:
 
 **Avro is an open-source binary data serialization format** that comes from the Hadoop world and has many use cases. It offers rich data structures and offers code generation on statically typed programming languages such as C# and Java.
 
-Avro has support for primitive types
+Avro has support for **primitive types**
 - int, 
 - boolean, 
 - string , 
 - float 
 - etc.
-and complex types
+
+and **complex types**
 - enums,
 - arrays, 
 - maps,
@@ -79,7 +80,26 @@ Let’s look at a sample Avro schema file:
 
 With time, the data schemas will evolve. We may add new fields or update existing fields. With evolving schemas, our downstream consumers should be able to consume messages seamlessly without sending a production alert at 3 AM. Schema Registry is specifically built for data evolution by versioning each schema change.
 
+Below figure shows an example of schema evolution
+![kafka_schema_evolution](../images/kafka_schema_evolution.png)
 
 
+When a schema is first created, it gets a **unique schema ID and a version number**. If schema changes and the changes are compatible, then we get a **new schema ID and our version number increments**. There are two ways to tell if a schema is compatible: by using a [maven plugin](https://docs.confluent.io/platform/current/schema-registry/develop/maven-plugin.html#schema-registry-test-compatibility) (in Java) or by simply making a REST call. This compatibility check compares schema on the local machine with the schema on the schema registry.
+
+For more details, you can visit the offical [doc](https://docs.confluent.io/platform/current/schema-registry/avro.html)
+
+## Schema evolution pattern
+There are various patterns for schema evolution:
+
+### Forward Compatibility: 
+For example, if we update producer to V2 version of the schema and gradually update consumers to the V2 version. This is forward compatibility.
+
+![kafka_schema_evo_backward_compatibility](../images/kafka_schema_evo_backward_compatibility.png)
+
+### Backward Compatibility: 
+If we update all consumers to the V2 version of the schema and then update producer to V2 version. This is backward compatibility
+
+![kafka_schema_evo_forward_compatibility](../images/kafka_schema_evo_forward_compatibility.png)
 
 
+For more details about compatibility patterns, you can visit the offical [doc](https://docs.confluent.io/platform/current/schema-registry/avro.html)
