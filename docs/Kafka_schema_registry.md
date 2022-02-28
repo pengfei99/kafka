@@ -76,6 +76,9 @@ Let’s look at a sample Avro schema file:
 }
 ```
 
+Below figure shows a workflow example of schema registry with avro data serilization
+![kafka_schema_registry_avro_architecture](../images/kafka_schema_registry_avro_architecture.png)
+
 # Schema Evolution
 
 With time, the data schemas will evolve. We may add new fields or update existing fields. With evolving schemas, our downstream consumers should be able to consume messages seamlessly without sending a production alert at 3 AM. Schema Registry is specifically built for data evolution by versioning each schema change.
@@ -103,3 +106,14 @@ If we update all consumers to the V2 version of the schema and then update produ
 
 
 For more details about compatibility patterns, you can visit the offical [doc](https://docs.confluent.io/platform/current/schema-registry/avro.html)
+
+# Install schema registry
+The schema registry is developed by confluence with a License (https://github.com/confluentinc/schema-registry/blob/master/LICENSE-ConfluentCommunity). 
+
+The official git [repo](https://github.com/confluentinc/schema-registry)
+
+There is an old doc (https://blog.clairvoyantsoft.com/installing-and-upgrading-the-kafka-schema-registry-2b2944a22244) which can install the schema registry alone
+
+The offical [doc](https://docs.confluent.io/platform/current/installation/installing_cp/overview.html#installation) will install the whole confluence platform with zk, kafka and other staff in it.
+
+To be continued
