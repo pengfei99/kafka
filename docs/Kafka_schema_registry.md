@@ -34,3 +34,52 @@ Following are some data serialization formats as per the above considerations:
 |:---|:----:|:----:|
 | Json | No | No |
 | XML | No | Yes|
+| Yaml | No | No |
+| Avro | Yes | Yes|
+| Protocol Buff | Yes | Yes|
+| thrift | Yes | Yes|
+
+
+**Apache Avro** has been the default Kafka serialisation mechanism for a long time. Confluent just updated(Dec 2021) their Kafka streaming platform with additional support for serialising data with **Protocol buffers (or protobuf) and JSON Schema serialisation**. For more details about these format, read this [doc](https://simon-aubury.medium.com/kafka-with-avro-vs-kafka-with-protobuf-vs-kafka-with-json-schema-667494cbb2af)
+
+## Apache Avro
+
+**Avro is an open-source binary data serialization format** that comes from the Hadoop world and has many use cases. It offers rich data structures and offers code generation on statically typed programming languages such as C# and Java.
+
+Avro has support for primitive types
+- int, 
+- boolean, 
+- string , 
+- float 
+- etc.
+and complex types
+- enums,
+- arrays, 
+- maps,
+- unions 
+- etc.
+
+Avro schemas are defined using JSON. The embedded documentation in Avro can specify what each field/column means. We can have a default value for fields which is very useful when we evolve our schemas.
+
+Let’s look at a sample Avro schema file:
+
+```json
+{
+  "type" : "record",
+  "name" : "User",
+  "namespace" : "com.example.models.avro",
+  "fields" : [ 
+   {"name" : "userID", "type" : "string", "doc" : "User ID of a web app"}, 
+   {"name" : "customerName", "type" : "string", "doc" : "Customer Name", "default": "Test User"} 
+  ]
+}
+```
+
+# Schema Evolution
+
+With time, the data schemas will evolve. We may add new fields or update existing fields. With evolving schemas, our downstream consumers should be able to consume messages seamlessly without sending a production alert at 3 AM. Schema Registry is specifically built for data evolution by versioning each schema change.
+
+
+
+
+
