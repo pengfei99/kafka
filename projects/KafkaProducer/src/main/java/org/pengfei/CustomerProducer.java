@@ -35,18 +35,18 @@ public class CustomerProducer {
         /** Step1 : set up the producer config*/
         setConfig();
         // add customPartitioner to producer config
-        config.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,customPartitioner);
+        config.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, customPartitioner);
 
         /** Step2: build the kafka producer instance*/
         init();
     }
 
-    public void init(){
+    public void init() {
         /** Step2: build the kafka producer instance*/
         this.producer = new KafkaProducer<>(config);
     }
 
-    public void setConfig(){
+    public void setConfig() {
         this.config = new Properties();
         // These three config is mandatory, we can't omit them
         // ProducerConfig.BOOTSTRAP_SERVERS_CONFIG == "bootstrap.servers"
@@ -64,17 +64,20 @@ public class CustomerProducer {
 
         // The two lines are equals.
         //config.put(ProducerConfig.ACKS_CONFIG,"-1");
-        config.put("acks", "1");
+        config.put(ProducerConfig.ACKS_CONFIG, "1");
 
-        config.put("retries", 3);
+        // set maximum retry
+        config.put(ProducerConfig.RETRIES_CONFIG, 3);
         //batch size is 3 MB
-        config.put("batch.size", 323840);
+        config.put(ProducerConfig.BATCH_SIZE_CONFIG, 323840);
         // the sender will wait 0.01 sec for filling the batch before sending it.
-        config.put("linger.ms", 10);
-        //buffer size is 32MB
-        config.put("buffer.memory", 33554432);
+        config.put(ProducerConfig.LINGER_MS_CONFIG, 10);
+        //buffer memory size is 32MB
+        config.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+        // add compression, it supports lz4,snappy,zstd.
+        config.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
         //3 secs
-        config.put("max.block.ms", 3000);
+        config.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 3000);
     }
 
     /**
