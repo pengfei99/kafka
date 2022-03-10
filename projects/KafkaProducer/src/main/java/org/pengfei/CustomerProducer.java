@@ -57,7 +57,7 @@ public class CustomerProducer {
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
         // It's recommended to assign an ID to each client(producer and consumer)
-        config.put(ProducerConfig.CLIENT_ID_CONFIG, "exp1_p1");
+        config.put(ProducerConfig.CLIENT_ID_CONFIG, "SimpleProducer");
 
         // Properties which modify the behaviours of the producer. For example make the message safer, or has higher
         // throughput
