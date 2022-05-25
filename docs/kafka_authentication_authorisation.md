@@ -135,4 +135,39 @@ super.users=User:admin
 ```
 
 - line 1: define the authorizer class name
-- line 2: 
+- line 2: define the listener address
+- line 3: define the security protocol between client and broker
+- line 4: define the security protocol between broker
+- line 5: define the security protocol for authentication  
+- line 6: define the Kafka **super users**' user-name. The Kafka super users: have full access to all APIs. This 
+          configuration reduces the overhead of defining per-API ACLs for the user who is meant to have full API 
+          access. The user-name must be defined in the JAAS before. In our case we choose the user admin as the super user
+
+We recommend you to change the modified properties file name to something like **sasl-plain-server.properties**. So you know
+which security configuration your brokers are running with:
+
+```shell
+bin/kafka-server-start.sh config/sasl-plain-server.properties
+```
+
+Once you complete the above steps 1 and 2, the Kafka brokers are prepared to authenticate and authorize clients. 
+From now on, only authenticated and authorized clients are able to connect to and use it.
+ 
+
+### Client side configuration
+
+We have seen how to configure brokers, now we need to configure clients (e.g. producer, consumer). In this tutorial, we
+will use kafka cli client. But kafka java/python api also supports the security config.
+
+We will use below scenario to configure the authentication and authorization.
+- alice creates a topic called `test`, and produce message to this topic
+- bob consumes from topic `test` in consumer group bob-group
+- charlie queries the bob-group to retrieve the group offsets.
+
+As we mentioned above, now the broker only accepts authenticated users. So all clients without success authentication
+will fail.
+
+For example below command will fail:
+```shell
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test
+```
