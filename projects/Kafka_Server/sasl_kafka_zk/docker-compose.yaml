@@ -1,0 +1,36 @@
+version: '2'
+services:
+  zookeeper:
+    image: zookeeper
+    user: "0:0"
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOOKEEPER_SERVERS: server.1=zookeeper:2888:3888
+      ZOOKEEPER_SASL_ENABLED: "false"
+    volumes:
+      - ./tmp/zoo1/data:/data
+      - ./tmp/zoo1/datalog:/datalog
+  kafka:
+    image: confluentinc/cp-kafka:6.2.4
+    user: "0:0"
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_LISTENERS: SASL_PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: SASL_PLAINTEXT://localhost:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ZOOKEEPER_SASL_ENABLED: "false"
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASL_PLAINTEXT
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jaas-kafka-server.conf:/etc/kafka/kafka_server_jaas.conf
+      - ./tmp/data:/var/lib/kafka/data
+    links:
+      - zookeeper
