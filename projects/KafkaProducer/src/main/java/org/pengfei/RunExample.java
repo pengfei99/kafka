@@ -58,10 +58,10 @@ public class RunExample {
         RunExample.SimpleProducerExample(BROKERS_URL,topicName,MESSAGE_COUNT);
 
         // 2. Producer with custom partition example
-        RunExample.ProducerWithCustomPartitionerExample(BROKERS_URL,topicName,MESSAGE_COUNT,customProducerName);
+        // RunExample.ProducerWithCustomPartitionerExample(BROKERS_URL,topicName,MESSAGE_COUNT,customProducerName);
 
         // 3. Producer send message with transaction
-        RunExample.ProducerWithTransaction(BROKERS_URL,topicName,MESSAGE_COUNT);
+        // RunExample.ProducerWithTransaction(BROKERS_URL,topicName,MESSAGE_COUNT);
 
     }
 }
