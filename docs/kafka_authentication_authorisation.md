@@ -88,21 +88,24 @@ Below is an example of the JAAS file
 ```text
 KafkaServer {
     org.apache.kafka.common.security.plain.PlainLoginModule required
-    username="broker_admin"
-    password="broker_admin"
-    user_admin="client_admin_pwd"
+    username="admin"
+    password="admin-secret"
+    user_admin="admin-secret"
     user_alice="client_alice_pwd"
     user_pengfei="client_pengfei_pwd";
 };
 ```
 
 - line 1: defines the custom login module (i.e. PlainLoginModule)
-- line 2~3: broker_admin/broker_admin is the username and password for inter-broker communication.
+- line 2~3: admin/admin-secret is the username and password for inter-broker communication.
 - line 4~6: we define three pairs of valid user_name and password. The format is user_<user_name>="<user_password>".
-            So in our case, the three pair is admin/client_admin_pwd, alice/client_alice_pwd, pengfei/client_pengfei_pwd
+            So in our case, the three pair is admin/admin-secret, alice/client_alice_pwd, pengfei/client_pengfei_pwd
 
-If the line user_admin="admin" is removed from this file, the broker is not able to authenticate and authorize an 
+If the line user_admin="admin-secret" is removed from this file, the broker is not able to authenticate and authorize an 
 admin user. Only the admin user can to connect to other brokers in this case.
+
+**Very important, although we define admin username and password twice, but they must be identical (both name and password)**
+otherwise, you will receive can't authenticate errors.
 
 ##### Make kafka broker aware of this JAAS file
 
@@ -112,7 +115,7 @@ with `-Djava.security.auth.login.config=[path_to_jaas_file]`.
 [path_to_jaas_file] can be something like: config/jaas-kafka-server.conf. Below is an example:
 
 ```shell
-export KAFKA_OPTS="-Djava.security.auth.login.config=/opt/kafka/config/jaas-kafka-server.conf"
+export KAFKA_OPTS="-Djava.security.auth.login.config=/opt/kafka/kafka-3.1.0/config/kraft/jaas-kafka-server.conf"
 ```
 
 The default login module for the PLAIN mechanism should **not be used in production environments** as it requires 
@@ -171,3 +174,6 @@ For example below command will fail:
 ```shell
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test
 ```
+
+
+## Test it with a docker compose
