@@ -131,4 +131,20 @@ bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config /home/pliu/
 
 bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config /home/pliu/git/kafka/projects/Kafka_Server/sasl_kafka_zk/client_config/admin.properties --add --allow-principal User:pengfei --operation Read --topic test-topic
 ```
+### 3.3.3 Recheck your acl list
 
+After adding all the rules, we can check if they have been added correctly or not
+
+```shell
+./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config /home/pliu/git/kafka/projects/Kafka_Server/sasl_kafka_zk/client_config/admin.properties --list
+
+# you should see below output
+Current ACLs for resource `ResourcePattern(resourceType=GROUP, name=bob-group, patternType=LITERAL)`: 
+ 	(principal=User:pengfei, host=*, operation=READ, permissionType=ALLOW)
+	(principal=User:bob, host=*, operation=READ, permissionType=ALLOW) 
+
+Current ACLs for resource `ResourcePattern(resourceType=TOPIC, name=test-topic, patternType=LITERAL)`: 
+ 	(principal=User:pengfei, host=*, operation=READ, permissionType=ALLOW)
+	(principal=User:bob, host=*, operation=READ, permissionType=ALLOW) 
+
+```
