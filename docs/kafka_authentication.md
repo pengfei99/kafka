@@ -87,7 +87,7 @@ variable with `-Djava.security.auth.login.config=[path_to_jaas_file]`.
 [path_to_jaas_file] can be something like: config/jaas-kafka-server.conf. Below is an example:
 
 ```shell
-export KAFKA_OPTS="-Djava.security.auth.login.config=/opt/kafka/kafka-3.1.0/config/kraft/jaas-kafka-server.conf"
+export KAFKA_OPTS="-Djava.security.auth.login.config=/opt/kafka/kafka-3.1.0/config/jaas-kafka-server.conf"
 ```
 
 The default login module for the PLAIN mechanism should **not be used in production environments** as it requires
@@ -103,19 +103,23 @@ broker properties file (server.properties):
 
 ```properties
 authorizer.class.name=kafka.security.authorizer.AclAuthorizer
-listeners=SASL_PLAINTEXT://:9092
+listeners=SASL_PLAINTEXT://localhost:9092
+advertised.listeners=SASL_PLAINTEXT://localhost:9092
 security.inter.broker.protocol=SASL_PLAINTEXT
-sasl.mechanism.inter.broker.protocol=PLAIN
 sasl.enabled.mechanisms=PLAIN
+sasl.mechanism.inter.broker.protocol=PLAIN
+allow.everyone.if.no.acl.found=true
+auto.create.topics.enable=true
 super.users=User:admin
 ```
 
 - line 1: define the authorizer class name
-- line 2: define the listener address
-- line 3: define the security protocol between client and broker
-- line 4: define the security protocol between broker
-- line 5: define the security protocol for authentication
-- line 6: define the Kafka **super users**' user-name. The Kafka super users: have full access to all APIs. This
+- line 2,3: define the listener address and the security protocol for authentication
+- line 4: define the security protocol between client and broker
+- line 5: define the security protocol between broker
+- line 6: if no acl rule in the authorizer, allow all
+- line 7: producer can create topic automatically if topic does not exist 
+- line 8: define the Kafka **super users**' user-name. The Kafka super users: have full access to all APIs. This
   configuration reduces the overhead of defining per-API ACLs for the user who is meant to have full API access. The
   user-name must be defined in the JAAS before. In our case we choose the user admin as the super user
 
